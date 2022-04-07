@@ -1,113 +1,155 @@
-#include <iostream.h>
-#include <stdio.h>
-#include <conio.h>
- 
-void bubblesort(float[], int);
-void insertionsort(float[], int);
-void selectionsort(float[], int); 
- 
-void print(float[], int);
-void read(float[], int);
- 
-void main() {
-  char wtc = 'y';
-  while (wtc == 'y' || wtc == 'Y') {
-    clrscr();
-    int choice, n;
-    float a[200];
-    printf("Enter the size of array");
-    scanf("%d", & n);
-    printf("\n");
-    printf("Enter %d integers of array", n);
- 
-    read(a, n);
-    printf("\n Enter the following numbers to use the following techniques:\n");
-    printf("\t1.BUBBLE SORT\n");
-    printf("\t2.INSERTION SORT\n");
-    printf("\t3.SELECTION SORT\n");
- 
-    printf("\n");
-    printf("Enter your choice");
-    scanf("%d", & choice);
-    switch (choice) {
-    case 1:
-      {
-        bubblesort(a, n);
-        print(a, n); //calling funtion by using switch statements
-        getch();
-        break;
-      }
-    case 2:
-      {
-        insertionsort(a, n);
-        print(a, n);
-        getch();
-        break;
-      }
-    case 3:
-      {
-        selectionsort(a, n);
-        print(a, n);
-        getch();
-        break;
-      }
 
+#include <stdio.h>
+  
+void swap(int *xp, int *yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+  
+int selectionSort(int arr[], int n)
+{
+    int i, j, min_idx;
+    int count = 0;
+    // One by one move boundary of unsorted subarray
+    for (i = 0; i < n-1; i++)
+    {
+        count++;
+        // Find the minimum element in unsorted array
+        min_idx = i;
+        for (j = i+1; j < n; j++)
+        {   count++;
+            if (arr[j] < arr[min_idx])
+            {
+                count++;
+                min_idx = j;
+            }
+        }
+        
+        // Swap the found minimum element with the first element
+        if( min_idx!= i)
+        {
+            count++;
+            swap(&arr[min_idx], &arr[i]);
+            count++;
+        }
+        
     }
     
-    printf("\n\n Do you want to continue(y/n)");
-    scanf("%d",&wtc);
-  }
-  return 0;
+    return count;
 }
- 
-void read(float a[], int n) {
-  for (int i = 0; i < n; i++) {
-    //printf(a[i]);
-  }
-}
- 
-//Bubble sort implementation
-void bubblesort(float a[], int n) {
-  for (int p = 0; p < (n - 1); p++) {
-    for (int i = 0; i < n - 1; i++) {
-      if (a[i] > a[i + 1]) {
-        float temp;
-        temp = a[i + 1];
-        a[i + 1] = a[i];
-        a[i] = temp;
-      }
+
+int insertionSort(int arr[], int n)
+{
+    
+    int i, key, j,count=0;
+    for (i = 1; i < n; i++) 
+    {   count++;
+        key = arr[i];
+        j = i - 1;
+
+        /* Move elements of arr[0..i-1], that are
+        greater than key, to one position ahead
+        of their current position */
+        while (j >= 0 && arr[j] > key) {
+            count++;
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
     }
-  }
+    
+    return count;
 }
- 
-//Insertion sort implementation
-void insertionsort(float a[], int n) {
-  for (int i = 1; i < n; i++) {
-    float x = a[i];
-    int j = i;
-    while (j > 0 && a[j - 1] > x) //definition of insertion sort
-      a[j--] = a[j - 1];
-    a[j] = x;
-  }
+  
+void printArray(int arr[], int size)
+{
+    int i;
+    for (i=0; i < size; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
 }
- 
-//Selection sort implementation
-void selectionsort(float a[], int n) {
-  for (int i = 0; i < n; i++) {
- 
-    for (int j = i + 1; j <= n - 1; j++)
-      if (a[i] > a[j]) {
-        float temp;
-        temp = a[i];
-        a[i] = a[j];
-        a[j] = temp;
-      }
-  }
+
+int findMax(int *myArray,int size)
+{
+    int i;
+    int max = myArray[0];
+    for(i=1;i<size;i++)
+    {
+        if(myArray[i]>max)
+        {
+            
+            max =  myArray[i];
+            //printf("%d\n",max);
+        }
+    }
+    return max;
 }
- 
-void print(float a[], int n) {
-  for (int i = 0; i < n; i++) {
-    scanf("%d",&a[i]);
-  }
-  //cout << endl;
+int countingSort(int *myArray,int size,int range)
+{
+    int i,j,k,steps=0;
+    int count[range+1];
+    int sortedArr[size];
+    for(i=0;i<range+1;i++)
+    {   
+        steps++;
+        count[i] =0;
+    }
+    //printf("counting array\n");
+    for(i=0;i<size;i++)
+    {
+        steps++;
+        ++count[myArray[i]];
+    }
+    // for(i=0;i<range+1;i++)
+    // {
+    //     printf("%d\n",count[i]);
+    // }
+    //printf("updating counting array\n");
+    for(j=1;j<range+1;j++)
+    {   
+        steps;
+        count[j] = count[j]+count[j-1];
+    }
+    // for(i=0;i<range+1;i++)
+    // {
+    //     printf("%d\n",count[i]);
+    // }
+
+   for(k=size-1;k>=0;k--)
+   {
+       steps++;
+       sortedArr[--count[myArray[k]]] = myArray[k];   
+   }
+   for(i =0;i<size;i++)
+   {
+       steps++;
+       myArray[i] = sortedArr[i];
+   }
+  return steps;
+}  
+
+int main()
+{
+    int arr1[9] = {64, 25, 12, 22, 11,14,8,25,69};
+    int arr2[9] = {64, 25, 12, 22, 11,14,8,25,69};  
+    int arr3[9] = {64, 25, 12, 22, 11,14,8,25,69};   
+    int count1 = selectionSort(arr1, 9);
+    printf("Sorted array using selection sort: \n");
+    printArray(arr1, 9);
+    printf("the count is %d\n",count1);
+    int count2 = insertionSort(arr2,9);
+    printf("\n\n");
+    printf("Sorted array using insertion sort: \n");
+    printArray(arr2, 9);
+    printf("the count is %d\n",count2);
+    int range = findMax(arr3,9);
+    int count3 = countingSort(arr3,9,range);
+    printf("\n\n");
+    printf("Sorted array using counting sort: \n");
+    printArray(arr3, 9);
+    printf("the count is %d\n",count3);
+    
+    return 0;
 }
